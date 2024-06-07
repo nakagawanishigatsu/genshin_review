@@ -1,0 +1,74 @@
+# 原神视频所有评论
+
+收集时间：2021年10月14日
+视频数量：141
+评论数量：约120万条 (1197585)
+文件大小：219MB
+字段数：9
+
+## 字段解释
+
+字段名	数据类型(Dtype)	数据类型(MySQL)	解释
+--------------------------------------------------------
+index	int64	bigint	序号
+rpid	int64	bigint	评论的唯一标识符(reply id)
+oid	int64	bigint	视频的av号(可通过www.bilibili.com/video/avxxxxx直接访问)
+mid	int64	bigint	评论发布者的UID(member id)
+name	object	varchar	评论发布者的昵称
+level	int64	int	评论发布者的等级
+datetime	object	varchar	评论发布时间(YYYY-MM-DD HH:MM:SS)
+content	object	text	评论内容
+like	int64	bigint	赞数
+rcount	int64	bigint	回复数
+
+可以用Python或者MySQL数据库导入查询，不能用Excel打开
+
+
+## 代码
+
+**附Python查询代码，供有需要的人，建议用jupyter notebook**
+
+'''
+import pandas as pd
+
+df = pd.read_csv("原神视频所有评论120万条.csv",lineterminator="\n") 
+df.drop("Unnamed: 0", axis = 1, inplace = True)
+df.dropna(subset = ["content"], inplace = True)
+df.drop_duplicates(keep = "first", inplace = True)
+print(str(df.shape[0]) + " comments and their related information are scrapped from Target Video.")
+df.head()
+
+find1 = df.loc[df["mid"] == 1871001] #查询 UID 为 1871001 的用户所有发言记录（其实是棉花大哥哥）
+find2 = df.loc[df["name"] == "ZMI紫米"] #查询 名字 为 “ZMI紫米” 的用户所有发言记录
+contains = df[df["content"].str.contains("胡桃语音")] #查询所有内容包含“胡桃语音”的评论（近期的节奏点）
+
+'''
+
+
+-------------------------10月19日更新------------------------
+
+# 原神游戏中心所有评论
+
+收集时间：2021年10月18日
+评论数量：约28.5万条 (284994)
+文件大小：82MB
+字段数：12
+
+## 字段解释
+
+字段名		解释
+-------------------------------
+index		序号
+comment_no	评论编号（CM+数字）
+oid		游戏的id号（原神为103496）
+mid		评论发布者的UID
+name		评论发布者的昵称
+level		评论发布者的等级
+datetime		评论发布时间（YYYY-MM-DD HH:MM:SS）
+content		评论内容
+grade		评分（2、4、6、8、10）
+device_type	设备型号（如：Redmi Note 8 Pro，有空值）
+up		赞数
+down		踩数
+rcount		回复数（此项有问题，建议不用）
+
